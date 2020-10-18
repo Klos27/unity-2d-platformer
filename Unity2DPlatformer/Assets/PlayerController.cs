@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb;
     private int xVector = 5;
+    private int yVector = 10;
 
 
     // Start is called before the first frame update
@@ -25,6 +26,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow))
         {
             rb.velocity = new Vector2(xVector, rb.velocity.y);
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            rb.velocity = new Vector2(rb.velocity.y, yVector);
         }
     }
 }
