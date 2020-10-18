@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            rb.velocity = new Vector2(rb.velocity.y, yVector);
+            rb.velocity = new Vector2(rb.velocity.x, yVector);
         }
     }
 }
