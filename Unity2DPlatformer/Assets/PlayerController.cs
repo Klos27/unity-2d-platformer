@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     private int xVector = 5;
     private int yVector = 10;
-
+    public Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -23,11 +23,17 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(-xVector, rb.velocity.y);
             transform.localScale = new Vector2(-1, 1);
+            anim.SetBool("running", true);
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             rb.velocity = new Vector2(xVector, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
+            anim.SetBool("running", true);
+        }
+        else
+        {
+            anim.SetBool("running", false);
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
