@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Networking;
 
 public class Menu_LoginScreen : MonoBehaviour
 {
@@ -33,6 +34,28 @@ public class Menu_LoginScreen : MonoBehaviour
         Application.Quit();
     }
 
+    IEnumerator logIn(string uri, string login, string password)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("login", login);
+        form.AddField("password", password);
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                Debug.Log(webRequest.downloadHandler.text);
+            }
+        }
+    }
+
     public void loginButtonClicked()
     {
         dialogText.SetActive(false);
@@ -41,6 +64,8 @@ public class Menu_LoginScreen : MonoBehaviour
         // Get login password from form
         login = loginInputField.GetComponent<InputField>().text;
         password = passwordInputField.GetComponent<InputField>().text;
+
+        StartCoroutine(logIn("http://localhost/phpScripts/logIn.php", login, password));
 
         Debug.Log("login=" + login);
         Debug.Log("password=" + password);
