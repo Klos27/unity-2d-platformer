@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static Database_Utils;
 
 public class Menu_LoginScreen : MonoBehaviour
 {
@@ -61,6 +62,10 @@ public class Menu_LoginScreen : MonoBehaviour
             playerName = login;
             Debug.Log("DB playerId=" + playerId);
             Debug.Log("DB playerName=" + playerName);
+
+            //Database_Utils databaseUtils = new Database_Utils { };    // Enable MySqlConnector by default
+            Database_Utils databaseUtils = new Database_Utils (DatabaseConnectionType.Php); // Enable PhpConnector in constructor
+            databaseUtils.TestDatabaseConnection();
         }
 
         if (shouldBeLogged)
