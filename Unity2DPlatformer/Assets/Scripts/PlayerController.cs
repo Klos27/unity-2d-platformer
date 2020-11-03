@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
 
     public Rigidbody2D rb;
-    private int xVector = 5;
-    private int yVector = 10;
     public Animator anim;
 
-    public int coinPoints = 0;
+    private int xVector = 5;
+    private int yVector = 10;
+
     private int coin20Points = 20;
     private int coin10Points = 10;
+
+    [SerializeField] private int coinPoints = 0;
+    [SerializeField] private Text coinPointsText;
 
     // Start is called before the first frame update
     void Start()
@@ -52,10 +56,13 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(collision.gameObject);
             coinPoints += coin20Points;
-        } else if (collision.tag == "Coin10P")
+            coinPointsText.text = coinPoints.ToString();
+        } 
+        else if (collision.tag == "Coin10P")
         {
             Destroy(collision.gameObject);
             coinPoints += coin10Points;
+            coinPointsText.text = coinPoints.ToString();
         }
     }
 }
