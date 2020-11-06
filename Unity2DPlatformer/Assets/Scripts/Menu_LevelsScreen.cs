@@ -27,6 +27,11 @@ public class Menu_LevelsScreen : MonoBehaviour
         
     }
 
+    void OnEnable()
+    {
+        InitLevels();
+    }
+
     public void InitLevels()
     {
         UpdatePlayerName();

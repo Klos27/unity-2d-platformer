@@ -11,6 +11,7 @@ public class Menu_LoginScreen : MonoBehaviour
     public GameObject passwordInputField;
     public GameObject dialogText;
     public GameObject background_MainMenu;
+    public GameObject background_LevelsScreen;
     public GameObject background_LoginScreen;
 
     private string login = "";
@@ -19,7 +20,13 @@ public class Menu_LoginScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (PlayerPrefs.GetInt("playerId") != 0 &&
+            PlayerPrefs.GetString("playerName") != "")
+        {
+            // Jump to LevelsScreen - Exit from level
+            background_LoginScreen.SetActive(false);
+            background_LevelsScreen.SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +38,8 @@ public class Menu_LoginScreen : MonoBehaviour
     public void exitGame()
     {
         Debug.Log("Exit game");
+        PlayerPrefs.DeleteKey("playerId");
+        PlayerPrefs.DeleteKey("playerName");
         Application.Quit();
     }
 
@@ -52,7 +61,7 @@ public class Menu_LoginScreen : MonoBehaviour
         if (login == "Guest")
         {
             shouldBeLogged = true;
-            playerId = 0;
+            playerId = int.MaxValue;
             playerName = "Guest";
         }
         else

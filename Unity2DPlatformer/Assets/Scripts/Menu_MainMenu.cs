@@ -30,4 +30,10 @@ public class Menu_MainMenu : MonoBehaviour
         playerName = PlayerPrefs.GetString("playerName");
         playerNameTextTMP.GetComponent<TMP_Text>().text = "Player: " + playerName;
     }
+
+    public void Logout()
+    {
+        PlayerPrefs.DeleteKey("playerId");
+        PlayerPrefs.DeleteKey("playerName");
+    }
 }
