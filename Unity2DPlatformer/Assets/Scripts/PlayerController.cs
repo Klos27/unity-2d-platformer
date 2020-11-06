@@ -34,9 +34,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Movement();
-        AnimatoinState();
-        anim.SetInteger("state", (int)state);
+		if(!PauseMenu.isGamePaused())
+        {
+			Movement();
+			AnimatoinState();
+			anim.SetInteger("state", (int)state);
+		}
     }
     void Movement()
     {
