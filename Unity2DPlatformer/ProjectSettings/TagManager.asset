@@ -47,9 +47,15 @@ TagManager:
   - name: Background
     uniqueID: 3939236945
     locked: 0
+  - name: DecorationsBehind
+    uniqueID: 79472957
+    locked: 0
   - name: Entity
     uniqueID: 2645221313
     locked: 0
   - name: Foreground
     uniqueID: 1481250397
+    locked: 0
+  - name: DecorationsAhead
+    uniqueID: 3769389483
     locked: 0
