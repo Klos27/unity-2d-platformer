@@ -39,4 +39,9 @@ public class Database_Utils
     {
         return m_databaseConnector.LoginUser(login, password);
     }
+
+    public void UpdateScore(int playerId, int worldId, int score)
+    {
+        m_databaseConnector.UpdateScore(playerId, worldId, score);
+    }
 }

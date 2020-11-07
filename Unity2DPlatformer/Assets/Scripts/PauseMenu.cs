@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     private static bool m_gameIsPaused = false;
+    private static bool m_gameIsEnded = false;
 
     public GameObject pauseMenuUi;
 
@@ -19,22 +20,37 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!IsGameEnded())
         {
-            if (isGamePaused())
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Resume();
-            }
-            else
-            {
-                Pause();
+                if (IsGamePaused())
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
         }
     }
 
-    public static bool isGamePaused()
+    public static bool IsGamePaused()
     {
         return m_gameIsPaused;
+    }
+
+    public static bool IsGameEnded()
+    {
+        return m_gameIsEnded;
+    }
+
+    public static void EndGame()
+    {
+        m_gameIsPaused = true;
+        m_gameIsEnded = true;
+        Time.timeScale = 0f;
     }
 
     public void Resume()
@@ -44,21 +60,21 @@ public class PauseMenu : MonoBehaviour
         m_gameIsPaused = false;
     }
 
-    void Pause()
+    public void Pause()
     {
         pauseMenuUi.SetActive(true);
-        Time.timeScale = 0f; // Choose something from 0f - 1f for slow motion
+        Time.timeScale = 0f; // Choose something from 0f - 1f for slow motion, or over 1f for speed up
         m_gameIsPaused = true;
     }
 
-    public void Restart()
+    public static void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         m_gameIsPaused = false;
     }
 
-    public void Exit()
+    public static void Exit()
     {
         SceneManager.LoadScene("Menu");
         Time.timeScale = 1f;
