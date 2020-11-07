@@ -6,11 +6,16 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviour
 {
 
-    public Rigidbody2D rb;
-    public Animator anim;
+    private Rigidbody2D rb;
+    private Animator anim;
+    private Collider2D coll;
 
-    private int xVector = 5;
-    private int yVector = 10;
+    private enum State { idle, running, jumping, falling };
+    private State state = State.idle;
+    [SerializeField] private LayerMask ground;
+
+    private int xVector = 7;
+    private int yVector = 40;
 
     private int coin20Points = 20;
     private int coin10Points = 10;
@@ -21,34 +26,63 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        Movement();
+        AnimatoinState();
+        anim.SetInteger("state", (int)state);
+    }
+    void Movement()
+    {
+        float hDirection = Input.GetAxis("Horizontal");
+
+        if (hDirection < 0)
         {
             rb.velocity = new Vector2(-xVector, rb.velocity.y);
             transform.localScale = new Vector2(-1, 1);
-            anim.SetBool("running", true);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else if (hDirection > 0)
         {
             rb.velocity = new Vector2(xVector, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
-            anim.SetBool("running", true);
+        }
+        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, yVector);
+            state = State.jumping;
+        }
+    }
+    void AnimatoinState()
+    {
+        if (state == State.jumping)
+        {
+            if (rb.velocity.y < 1f)
+            {
+                state = State.falling;
+            }
+        }
+        else if (state == State.falling)
+        {
+            if (coll.IsTouchingLayers(ground))
+            {
+                state = State.idle;
+            }
+        }
+        else if (Mathf.Abs(rb.velocity.x) > 2f)
+        {
+            state = State.running;
         }
         else
         {
-            anim.SetBool("running", false);
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            rb.velocity = new Vector2(rb.velocity.x, yVector);
+            state = State.idle;
         }
     }
-
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -57,7 +91,7 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
             coinPoints += coin20Points;
             coinPointsText.text = coinPoints.ToString();
-        } 
+        }
         else if (collision.tag == "Coin10P")
         {
             Destroy(collision.gameObject);
