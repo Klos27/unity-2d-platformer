@@ -20989,7 +20989,7 @@ GameObject:
   - component: {fileID: 418281481}
   - component: {fileID: 418281483}
   - component: {fileID: 418281484}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23648,6 +23648,11 @@ PrefabInstance:
       propertyPath: coinPointsText
       value: 
       objectReference: {fileID: 1515754636}
+    - target: {fileID: 9065991051597488003, guid: 468fae7017f13374687ef74042245b54,
+        type: 3}
+      propertyPath: ground.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 9065991051597488012, guid: 468fae7017f13374687ef74042245b54,
         type: 3}
       propertyPath: m_Name
