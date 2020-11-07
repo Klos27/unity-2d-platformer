@@ -16,7 +16,7 @@ public class Database_Utils
     Database_IDatabaseConnector m_databaseConnector;
 
     // Default connectionType set to MySql
-    public Database_Utils(DatabaseConnectionType connectionType = DatabaseConnectionType.MySql)
+    public Database_Utils(DatabaseConnectionType connectionType = DatabaseConnectionType.Php)
     {
         if (connectionType == DatabaseConnectionType.MySql)
         {
@@ -26,7 +26,9 @@ public class Database_Utils
         else // if (connectionType == DatabaseConnectionType.Php)
         {
             Debug.Log("Database_Utils Create PhpConnection");
-            m_databaseConnector = new Database_PhpConnector { };
+            GameObject gameObject = new GameObject();
+            gameObject.AddComponent<Database_PhpConnector>();
+            m_databaseConnector = gameObject.GetComponent<Database_PhpConnector>(); ;
         }
     }
 
@@ -43,5 +45,9 @@ public class Database_Utils
     public void UpdateScore(int playerId, int worldId, int score)
     {
         m_databaseConnector.UpdateScore(playerId, worldId, score);
+    }
+    public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)
+    {
+        return m_databaseConnector.RegisterUser(login, password, repeatedPassword, email);
     }
 }
