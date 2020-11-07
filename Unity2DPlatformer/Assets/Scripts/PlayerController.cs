@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private enum State { idle, running, jumping, falling };
     private State state = State.idle;
-    [SerializeField] private LayerMask ground;
+    [SerializeField] private LayerMask ground = 0;
 
     private int xVector = 7;
     private int yVector = 40;
@@ -49,7 +49,8 @@ public class PlayerController : MonoBehaviour
     {
         if(!PauseMenu.IsGamePaused())
         {
-			Movement();
+            UpdateTimerText();
+            Movement();
 			AnimatoinState();
 			anim.SetInteger("state", (int)state);
 		}
