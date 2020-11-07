@@ -73,4 +73,9 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
         // TODO Update player score if is higher than previous
         Debug.Log("Score updated: playerId=" + playerId + " worldId=" + worldId + " score=" + score);
     }
+
+    public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)
+    {
+        return null;
+    }
 }
