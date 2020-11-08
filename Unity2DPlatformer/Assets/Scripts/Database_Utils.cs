@@ -37,7 +37,7 @@ public class Database_Utils
         m_databaseConnector.TestDatabaseConnection();
     }
 
-    public bool LoginUser(string login, string password)
+    public IEnumerator LoginUser(string login, string password)
     {
         return m_databaseConnector.LoginUser(login, password);
     }

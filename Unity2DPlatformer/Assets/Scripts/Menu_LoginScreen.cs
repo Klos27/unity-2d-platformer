@@ -7,25 +7,33 @@ using static Database_Utils;
 
 public class Menu_LoginScreen : MonoBehaviour
 {
+    private Database_Utils databaseUtils = null;
+
     public GameObject loginInputField;
     public GameObject passwordInputField;
-    public GameObject dialogText;
+    public GameObject dialogTextField;
     public GameObject background_MainMenu;
     public GameObject background_LevelsScreen;
     public GameObject background_LoginScreen;
 
     private string login = "";
     private string password = "";
+    private string dialogText = "";
 
     // Start is called before the first frame update
     void Start()
     {
+        dialogTextField.SetActive(false);
         if (PlayerPrefs.GetInt("playerId") != 0 &&
             PlayerPrefs.GetString("playerName") != "")
         {
             // Jump to LevelsScreen - Exit from level
             background_LoginScreen.SetActive(false);
             background_LevelsScreen.SetActive(true);
+        }
+        if (databaseUtils == null)
+        {
+            databaseUtils = new Database_Utils();
         }
     }
 
@@ -43,55 +51,58 @@ public class Menu_LoginScreen : MonoBehaviour
         Application.Quit();
     }
 
+    void updateCredentialsInForm()
+    {
+        loginInputField.GetComponent<InputField>().text = login;
+        passwordInputField.GetComponent<InputField>().text = password;
+    }
+
+    private void clearCredentialsForm()
+    {
+        login = "";
+        password = "";
+    }
+
+    void updateDialogText()
+    {
+        dialogTextField.GetComponent<Text>().text = dialogText;
+    }
+
     public void loginButtonClicked()
     {
-        dialogText.SetActive(false);
-        bool shouldBeLogged = false;
-        
-        // Get login password from form
+        dialogTextField.SetActive(false);
+
         login = loginInputField.GetComponent<InputField>().text;
         password = passwordInputField.GetComponent<InputField>().text;
 
-        Debug.Log("login=" + login);
-        Debug.Log("password=" + password);
+        StartCoroutine(logInUser(login, password));
+    }
 
-        int playerId;
-        string playerName;
-
-        if (login == "Guest")
+    private IEnumerator logInUser(string login, string password)
+    {
+        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.LoginUser(login, password));
+        yield return cd.coroutine;
+        string receivedMessage = (string)cd.result;
+        if (receivedMessage[0] == '0')
         {
-            shouldBeLogged = true;
-            playerId = int.MaxValue;
-            playerName = "Guest";
-        }
-        else
-        {
-            // TODO Connect to DB and check if player could be logged in
-            playerId = 999999;
-            playerName = login;
-            Debug.Log("DB playerId=" + playerId);
-            Debug.Log("DB playerName=" + playerName);
+            int userId = int.Parse(receivedMessage.Split('\t')[1]);
+            string userDbLogin = receivedMessage.Split('\t')[2];
 
-            //Database_Utils databaseUtils = new Database_Utils { };    // Enable MySqlConnector by default
-            Database_Utils databaseUtils = new Database_Utils (DatabaseConnectionType.Php); // Enable PhpConnector in constructor
-            databaseUtils.TestDatabaseConnection();
-        }
-
-        if (shouldBeLogged)
-        {
-            // Save playerId and playerName in memory
-            PlayerPrefs.SetInt("playerId", playerId);
-            PlayerPrefs.SetString("playerName", playerName);
+            PlayerPrefs.SetInt("playerId", userId);
+            PlayerPrefs.SetString("playerName", userDbLogin);
             PlayerPrefs.Save();
 
-            // Change screen to mainMenu
+            clearCredentialsForm();
+            updateCredentialsInForm();
+
             background_LoginScreen.SetActive(false);
             background_MainMenu.SetActive(true);
         }
         else
         {
-            // Display login error
-            dialogText.SetActive(true);
+            dialogText = receivedMessage;
+            updateDialogText();
+            dialogTextField.SetActive(true);
         }
     }
 }
