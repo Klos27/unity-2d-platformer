@@ -24,7 +24,10 @@ public class Menu_Register : MonoBehaviour
     void Start()
     {
         dialogTextField.SetActive(false);
-        databaseUtils = new Database_Utils();
+        if(databaseUtils == null)
+        {
+            databaseUtils = new Database_Utils();
+        }
     }
 
     // Update is called once per frame

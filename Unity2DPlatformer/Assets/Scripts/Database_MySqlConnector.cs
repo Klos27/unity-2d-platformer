@@ -63,9 +63,9 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
         }
     }
 
-    public bool LoginUser(string login, string password)
+    public IEnumerator LoginUser(string login, string password)
     {
-        return true;
+        return null;
     }
 
     public void UpdateScore(int playerId, int worldId, int score)

@@ -12,9 +12,27 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         Debug.Log("PHP Connection OK!");
     }
 
-    public bool LoginUser(string login, string password)
+    public IEnumerator LoginUser(string login, string password)
     {
-        return true;
+        WWWForm form = new WWWForm();
+        form.AddField("login", login);
+        form.AddField("password", password);
+        string uri = "http://localhost/phpScripts/retrieveExistingUser.php";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                yield return webRequest.downloadHandler.text;
+            }
+        }
     }
 
     public void UpdateScore(int playerId, int worldId, int score)
@@ -41,8 +59,10 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
             {
                 Debug.Log(webRequest.error);
             }
-
-            yield return webRequest.downloadHandler.text;
+            else
+            {
+                yield return webRequest.downloadHandler.text;
+            }
         }
     }
 }
