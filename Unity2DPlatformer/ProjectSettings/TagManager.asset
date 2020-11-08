@@ -5,8 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Coin20P
-  - Coin
   - Coin10P
+  - Spikes_Vert_L
+  - Spikes_Vert_R
+  - Spikes_Hor_D
+  - Spikes_Hor_U
   layers:
   - Default
   - TransparentFX

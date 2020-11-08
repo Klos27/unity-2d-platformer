@@ -173,23 +173,85 @@ public class PlayerController : MonoBehaviour
         // TODO Fill according to design
     }
          
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.tag == "Coin20P")
+        if (collider.tag == "Coin20P")
         {
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             coinPoints += coin20Points;
             UpdatePointsText();
         } 
-        else if (collision.tag == "Coin10P")
+        else if (collider.tag == "Coin10P")
         {
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             coinPoints += coin10Points;
             UpdatePointsText();
         }
-        else if (collision.tag == "EndGameChest")
+        else if (collider.tag == "EndGameChest")
         {
             EndGame();
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Spikes_Hor_D")
+        {
+            if (state == State.falling || state == State.jumping)
+            {
+                if (collision.gameObject.transform.position.y <= transform.position.y)
+                {
+                    //TODO remove destroy after Death implemented
+                    Destroy(collision.gameObject);
+                    Die();
+                }
+            }
+            
+        }
+        else if (collision.gameObject.tag == "Spikes_Hor_U")
+        {
+            if (state == State.falling || state == State.jumping)
+            {
+                if (collision.gameObject.transform.position.y >= transform.position.y)
+                {
+                    //TODO remove destroy after Death implemented
+                    Destroy(collision.gameObject);
+                    Die();
+                }
+            }
+
+        }
+        else if(collision.gameObject.tag == "Spikes_Vert_L")
+        {
+            if (state == State.falling || state == State.jumping || state == State.running)
+            {
+                if (collision.gameObject.transform.position.x <= transform.position.x)
+                {
+                    //TODO remove destroy after Death implemented
+                    Destroy(collision.gameObject);
+                    Die();
+                }
+            }
+
+        }
+        else if (collision.gameObject.tag == "Spikes_Vert_R")
+        {
+            if (state == State.falling || state == State.jumping || state == State.running)
+            {
+                if (collision.gameObject.transform.position.x >= transform.position.x)
+                {
+                    //TODO remove destroy after Death implemented
+                    Destroy(collision.gameObject);
+                    Die();
+                }
+            }
+
+        }
+
+    }
+
+    void Die()
+    {
+        
     }
 }
