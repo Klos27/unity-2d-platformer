@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour
     private State state = State.idle;
     [SerializeField] private LayerMask ground = 0;
 
-    private int xVector = 7;
-    private int yVector = 40;
+    private int xVector = 8;
+    private int yVector = 60;
 
     private int coin20Points = 20;
     private int coin10Points = 10;
@@ -53,7 +53,13 @@ public class PlayerController : MonoBehaviour
             Movement();
 			AnimatoinState();
 			anim.SetInteger("state", (int)state);
-		}
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                // TODO Delete this after implementation of end game chest!
+                // END GAME HACK - press Q
+                EndGame();
+            }
+        }
     }
     void Movement()
     {
@@ -90,13 +96,6 @@ public class PlayerController : MonoBehaviour
             {
                 state = State.idle;
             }
-
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                // TODO Delete this after implementation of end game chest!
-                // END GAME HACK - press Q
-                EndGame();
-            }
         }
         else if (Mathf.Abs(rb.velocity.x) > 2f)
         {
@@ -105,6 +104,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             state = State.idle;
+        }
+
+        if ((!coll.IsTouchingLayers(ground) || rb.velocity.y < 0) && state != State.jumping)
+        {
+            state = State.falling;
         }
     }
 
