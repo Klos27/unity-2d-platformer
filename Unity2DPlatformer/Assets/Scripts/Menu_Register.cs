@@ -12,7 +12,7 @@ public class Menu_Register : MonoBehaviour
     public GameObject emailInputField;
     public GameObject passwordInputField;
     public GameObject rePasswordInputField;
-    public GameObject dialogTextField;
+    public GameObject dialogText;
 
     private string m_login = "";
     private string m_email = "";
@@ -23,8 +23,8 @@ public class Menu_Register : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dialogTextField.SetActive(false);
-        if(databaseUtils == null)
+        dialogText.SetActive(false);
+        if (databaseUtils == null)
         {
             databaseUtils = new Database_Utils();
         }
@@ -66,14 +66,25 @@ public class Menu_Register : MonoBehaviour
         m_rePassword = "";
     }
 
+    private void clearDialogText()
+    {
+        m_dialogText = "";
+    }
+
     void updateDialogText()
     {
-        dialogTextField.GetComponent<Text>().text = m_dialogText;
+        dialogText.GetComponent<Text>().text = m_dialogText;
+    }
+
+    public void logInButtonClicked()
+    {
+        clearDialogText();
+        updateDialogText();
     }
 
     public void createAccountButtonClicked()
     {
-        dialogTextField.SetActive(false);
+        dialogText.SetActive(false);
         getCredentialsFromForm();
         StartCoroutine(registerUser(m_login, m_password, m_rePassword, m_email));
     }
@@ -94,6 +105,6 @@ public class Menu_Register : MonoBehaviour
             m_dialogText = registrationReceivedMessage;
         }
         updateDialogText();
-        dialogTextField.SetActive(true);
+        dialogText.SetActive(true);
     }
 }

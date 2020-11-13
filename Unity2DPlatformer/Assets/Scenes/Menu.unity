@@ -2017,7 +2017,7 @@ MonoBehaviour:
   emailInputField: {fileID: 408368977}
   passwordInputField: {fileID: 77650520}
   rePasswordInputField: {fileID: 1136918172}
-  dialogTextField: {fileID: 2134378795}
+  dialogText: {fileID: 2134378795}
 --- !u!1 &370278396
 GameObject:
   m_ObjectHideFlags: 0
@@ -3175,6 +3175,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 330294864}
+        m_TargetAssemblyTypeName: Menu_Register, Assembly-CSharp
+        m_MethodName: logInButtonClicked
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5290,7 +5302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loginInputField: {fileID: 1768085886}
   passwordInputField: {fileID: 1556309178}
-  dialogTextField: {fileID: 1237614926}
+  dialogText: {fileID: 1237614926}
   background_MainMenu: {fileID: 1517231693}
   background_LevelsScreen: {fileID: 885995316}
   background_LoginScreen: {fileID: 1035709275}

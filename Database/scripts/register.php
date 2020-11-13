@@ -10,11 +10,12 @@
 			exit();
 		}
 		
-		$loginCheckQuery = $con->prepare("SELECT login FROM game_user WHERE login = ?");
+		$loginCheckQuery = $con->prepare("SELECT login FROM player WHERE login = ?");
 		$loginCheckQuery->bind_param('s', $login);
 		$loginCheckQuery->execute();
 		
 		$loginCheck = $loginCheckQuery->get_result();
+		$loginCheckQuery->close();
 		
 		if (mysqli_num_rows($loginCheck) > 0)
 		{
@@ -42,11 +43,12 @@
 			exit();
 		}
 		
-		$emailCheckQuery = $con->prepare("SELECT email FROM game_user WHERE email = ?");
+		$emailCheckQuery = $con->prepare("SELECT email FROM player WHERE email = ?");
 		$emailCheckQuery->bind_param('s', $email);
 		$emailCheckQuery->execute();
 		
 		$emailCheck = $emailCheckQuery->get_result();
+		$emailCheckQuery->close();
 		
 		if (mysqli_num_rows($emailCheck) > 0)
 		{
@@ -55,16 +57,19 @@
 		}
 	}
 
-	function insertUser($con, $login, $password, $email) {
+	function insertPlayer($con, $login, $password, $email) {
 		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-		$insertUserQuery = $con->prepare("INSERT INTO game_user (login, password, email) VALUES (?, ?, ?)");
-		$insertUserQuery->bind_param('sss', $login, $hashedPassword, $email);
+		$insertPlayerQuery = $con->prepare("INSERT INTO player (login, password, email) VALUES (?, ?, ?)");
+		$insertPlayerQuery->bind_param('sss', $login, $hashedPassword, $email);
 		
 		try {
-			$insertUserQuery->execute();			
+			$insertPlayerQuery->execute();			
 		} catch (Exception $e) {
-			echo "8: Creating new user failed. Message: " . $e->getMessage() . "\n";
+			echo "8: Creating new player failed. Message: " . $e->getMessage() . "\n";
+			$insertPlayerQuery->close();
 			exit();
+		} finally {
+			$insertPlayerQuery->close();
 		}
 	}
 
@@ -86,9 +91,10 @@
 		checkLogin($con, $login);
 		checkPassword($password, $repeatedPassword);
 		checkEmail($con, $email);
-		insertUser($con, $login, $password, $email);
+		insertPlayer($con, $login, $password, $email);
 
 		echo "0";
+		$con->close();
 	}
 
 	main();

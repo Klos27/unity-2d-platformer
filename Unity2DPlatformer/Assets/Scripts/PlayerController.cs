@@ -47,12 +47,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!PauseMenu.IsGamePaused())
+        if (!PauseMenu.IsGamePaused())
         {
             UpdateTimerText();
             Movement();
-			AnimatoinState();
-			anim.SetInteger("state", (int)state);
+            AnimatoinState();
+            anim.SetInteger("state", (int)state);
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 // TODO Delete this after implementation of end game chest!
@@ -133,7 +133,7 @@ public class PlayerController : MonoBehaviour
     void EndGame()
     {
         // Stop time
-        PauseMenu.EndGame(); 
+        PauseMenu.EndGame();
 
         // Show end game panel
         endGamePanel.SetActive(true);
@@ -150,13 +150,26 @@ public class PlayerController : MonoBehaviour
         int finalScore = scoreMultiplier * coinPoints;
         endGameFinalScoreValueText.text = finalScore.ToString("0000");
 
-        // Update score in database
-        Database_Utils databaseUtils = new Database_Utils();
-
         string sceneName = SceneManager.GetActiveScene().name;
         int worldId = int.Parse(sceneName.Substring(6)); // Substring Level_<level_number>
 
-        databaseUtils.UpdateScore(PlayerPrefs.GetInt("playerId"), worldId, finalScore);
+        StartCoroutine(updateScore(PlayerPrefs.GetInt("playerId"), worldId, finalScore));
+    }
+
+    private IEnumerator updateScore(int playerId, int worldId, int finalScore)
+    {
+        Database_Utils databaseUtils = new Database_Utils();
+        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.UpdateScore(playerId, worldId, finalScore));
+        yield return cd.coroutine;
+        string updateScoreReceivedMessage = (string)cd.result;
+        if ("0".Equals(updateScoreReceivedMessage))
+        {
+            Debug.Log("Player score updating has been successfully executed");
+        }
+        else
+        {
+            Debug.LogError(updateScoreReceivedMessage);
+        }
     }
 
     public void ExitButtonClicked()
@@ -176,7 +189,7 @@ public class PlayerController : MonoBehaviour
 
         // TODO Fill according to design
     }
-         
+
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.tag == "Coin20P")
@@ -184,7 +197,7 @@ public class PlayerController : MonoBehaviour
             Destroy(collider.gameObject);
             coinPoints += coin20Points;
             UpdatePointsText();
-        } 
+        }
         else if (collider.tag == "Coin10P")
         {
             Destroy(collider.gameObject);
@@ -210,7 +223,7 @@ public class PlayerController : MonoBehaviour
                     Die();
                 }
             }
-            
+
         }
         else if (collision.gameObject.tag == "Spikes_Hor_U")
         {
@@ -225,7 +238,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        else if(collision.gameObject.tag == "Spikes_Vert_L")
+        else if (collision.gameObject.tag == "Spikes_Vert_L")
         {
             if (state == State.falling || state == State.jumping || state == State.running)
             {
@@ -256,6 +269,6 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        
+
     }
 }

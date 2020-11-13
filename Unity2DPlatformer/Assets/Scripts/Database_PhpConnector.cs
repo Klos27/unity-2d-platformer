@@ -17,7 +17,7 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         WWWForm form = new WWWForm();
         form.AddField("login", login);
         form.AddField("password", password);
-        string uri = "http://localhost/phpScripts/retrieveExistingUser.php";
+        string uri = "http://localhost/phpScripts/retrieveExistingPlayer.php";
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
         {
@@ -35,10 +35,28 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         }
     }
 
-    public void UpdateScore(int playerId, int worldId, int score)
+    public IEnumerator UpdateScore(int playerId, int worldId, int score)
     {
-        // TODO Update player score if is higher than previous
-        Debug.Log("Score updated: playerId=" + playerId + " worldId=" + worldId + " score=" + score);
+        WWWForm form = new WWWForm();
+        form.AddField("playerId", playerId);
+        form.AddField("worldId", worldId);
+        form.AddField("score", score);
+        string uri = "http://localhost/phpScripts/updateScore.php";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                yield return webRequest.downloadHandler.text;
+            }
+        }
     }
 
     public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)
