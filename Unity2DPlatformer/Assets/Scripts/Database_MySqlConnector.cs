@@ -68,10 +68,9 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
         return null;
     }
 
-    public void UpdateScore(int playerId, int worldId, int score)
+    public IEnumerator UpdateScore(int playerId, int worldId, int score)
     {
-        // TODO Update player score if is higher than previous
-        Debug.Log("Score updated: playerId=" + playerId + " worldId=" + worldId + " score=" + score);
+        return null;
     }
 
     public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)

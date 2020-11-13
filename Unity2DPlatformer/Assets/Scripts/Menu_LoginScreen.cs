@@ -11,19 +11,19 @@ public class Menu_LoginScreen : MonoBehaviour
 
     public GameObject loginInputField;
     public GameObject passwordInputField;
-    public GameObject dialogTextField;
+    public GameObject dialogText;
     public GameObject background_MainMenu;
     public GameObject background_LevelsScreen;
     public GameObject background_LoginScreen;
 
-    private string login = "";
-    private string password = "";
-    private string dialogText = "";
+    private string m_login = "";
+    private string m_password = "";
+    private string m_dialogText = "";
 
     // Start is called before the first frame update
     void Start()
     {
-        dialogTextField.SetActive(false);
+        dialogText.SetActive(false);
         if (PlayerPrefs.GetInt("playerId") != 0 &&
             PlayerPrefs.GetString("playerName") != "")
         {
@@ -53,29 +53,29 @@ public class Menu_LoginScreen : MonoBehaviour
 
     void updateCredentialsInForm()
     {
-        loginInputField.GetComponent<InputField>().text = login;
-        passwordInputField.GetComponent<InputField>().text = password;
+        loginInputField.GetComponent<InputField>().text = m_login;
+        passwordInputField.GetComponent<InputField>().text = m_password;
     }
 
     private void clearCredentialsForm()
     {
-        login = "";
-        password = "";
+        m_login = "";
+        m_password = "";
     }
 
     void updateDialogText()
     {
-        dialogTextField.GetComponent<Text>().text = dialogText;
+        dialogText.GetComponent<Text>().text = m_dialogText;
     }
 
     public void loginButtonClicked()
     {
-        dialogTextField.SetActive(false);
+        dialogText.SetActive(false);
 
-        login = loginInputField.GetComponent<InputField>().text;
-        password = passwordInputField.GetComponent<InputField>().text;
+        m_login = loginInputField.GetComponent<InputField>().text;
+        m_password = passwordInputField.GetComponent<InputField>().text;
 
-        StartCoroutine(logInUser(login, password));
+        StartCoroutine(logInUser(m_login, m_password));
     }
 
     private IEnumerator logInUser(string login, string password)
@@ -100,9 +100,9 @@ public class Menu_LoginScreen : MonoBehaviour
         }
         else
         {
-            dialogText = receivedMessage;
+            m_dialogText = receivedMessage;
             updateDialogText();
-            dialogTextField.SetActive(true);
+            dialogText.SetActive(true);
         }
     }
 }
