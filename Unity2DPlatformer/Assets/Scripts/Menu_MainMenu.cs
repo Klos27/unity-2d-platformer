@@ -15,13 +15,18 @@ public class Menu_MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UpdatePlayerName();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    
+    void OnEnable()
+    {
+        UpdatePlayerName();
     }
 
     void UpdatePlayerName()

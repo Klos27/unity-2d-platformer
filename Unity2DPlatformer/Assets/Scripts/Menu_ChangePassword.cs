@@ -19,14 +19,19 @@ public class Menu_ChangePassword : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dialogTextField.SetActive(false);
-        UpdatePlayerName();
+
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void OnEnable()
+    {
+        dialogTextField.SetActive(false);
+        UpdatePlayerName();
     }
 
     void UpdatePlayerName()
