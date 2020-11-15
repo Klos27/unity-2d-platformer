@@ -77,4 +77,9 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
     {
         return null;
     }
+
+    public IEnumerator ResetPassword(string login, string password, string repeatedPassword)
+    {
+        return null;
+    }
 }

@@ -50,4 +50,9 @@ public class Database_Utils
     {
         return m_databaseConnector.RegisterUser(login, password, repeatedPassword, email);
     }
+
+    public IEnumerator ResetPassword(string login, string password, string repeatedPassword)
+    {
+        return m_databaseConnector.ResetPassword(login, password, repeatedPassword);
+    }
 }

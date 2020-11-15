@@ -83,4 +83,28 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
             }
         }
     }
+
+    public IEnumerator ResetPassword(string login, string password, string repeatedPassword)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("login", login);
+        form.AddField("password", password);
+        form.AddField("repeatedPassword", repeatedPassword);
+        string uri = "http://localhost/phpScripts/resetPassword.php";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                yield return webRequest.downloadHandler.text;
+            }
+        }
+    }
 }
