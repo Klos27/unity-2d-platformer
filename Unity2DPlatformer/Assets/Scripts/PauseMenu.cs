@@ -24,6 +24,7 @@ public class PauseMenu : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                FindObjectOfType<AudioManager>().Play("EscPressed");
                 if (IsGamePaused())
                 {
                     Resume();
@@ -58,6 +59,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUi.SetActive(false);
         Time.timeScale = 1f;
         m_gameIsPaused = false;
+        FindObjectOfType<AudioManager>().PlayBackgroundMusic();
     }
 
     public void Pause()
@@ -65,6 +67,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUi.SetActive(true);
         Time.timeScale = 0f; // Choose something from 0f - 1f for slow motion, or over 1f for speed up
         m_gameIsPaused = true;
+        FindObjectOfType<AudioManager>().PauseBackgroundMusic();
     }
 
     public static void Restart()
@@ -72,6 +75,8 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
         m_gameIsPaused = false;
+        FindObjectOfType<AudioManager>().StopBackgroundMusic();
+        FindObjectOfType<AudioManager>().PlayBackgroundMusic();
     }
 
     public static void Exit()
