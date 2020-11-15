@@ -6,9 +6,11 @@ using TMPro;
 
 public class Menu_ChangePassword : MonoBehaviour
 {
+    private Database_Utils databaseUtils = null;
+
     public GameObject passwordInputField;
     public GameObject rePasswordInputField;
-    public GameObject dialogTextField;
+    public GameObject dialogText;
     public GameObject playerNameTextTMP;
 
     private string m_password = "";
@@ -19,18 +21,21 @@ public class Menu_ChangePassword : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (databaseUtils == null)
+        {
+            databaseUtils = new Database_Utils();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnEnable()
     {
-        dialogTextField.SetActive(false);
+        dialogText.SetActive(false);
         UpdatePlayerName();
     }
 
@@ -45,63 +50,59 @@ public class Menu_ChangePassword : MonoBehaviour
     {
         m_password = passwordInputField.GetComponent<InputField>().text;
         m_rePassword = rePasswordInputField.GetComponent<InputField>().text;
+    }
 
-        Debug.Log("password=" + m_password);
-        Debug.Log("rePassword=" + m_rePassword);
+    void clearCredentialsForm()
+    {
+        m_password = "";
+        m_rePassword = "";
+    }
+
+    void clearDialogText()
+    {
+        dialogText.GetComponent<Text>().text = "";
     }
 
     void updateCredentialsInForm()
     {
         passwordInputField.GetComponent<InputField>().text = m_password;
         rePasswordInputField.GetComponent<InputField>().text = m_rePassword;
-        dialogTextField.GetComponent<Text>().text = m_dialogText;
+    }
+
+    void updateDialogText()
+    {
+        dialogText.GetComponent<Text>().text = m_dialogText;
+    }
+
+    public void backButtonClicked()
+    {
+        clearDialogText();
+        updateDialogText();
     }
 
     public void changePasswordButtonClicked()
     {
-        dialogTextField.SetActive(false);
-        bool formValidateOk = true;
-
+        dialogText.SetActive(false);
         getCredentialsFromForm();
+        StartCoroutine(resetPassword(PlayerPrefs.GetString("playerName"), m_password, m_rePassword));
+    }
 
-        if (m_password == "" || m_rePassword == "")
+    private IEnumerator resetPassword(string login, string password, string repeatedPassword)
+    {
+        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.ChangePassword(login, password, repeatedPassword));
+        yield return cd.coroutine;
+        string receivedMessage = (string)cd.result;
+        if ("0".Equals(receivedMessage))
         {
-            m_dialogText = "Passwords cannot be empty!";
-            formValidateOk = false;
-        }
-        else if (m_password.Length < 6)
-        {
-            m_dialogText = "Password has to have at least 6 characters!";
-            formValidateOk = false;
-        }
-        else if (m_password != m_rePassword)
-        {
-            m_dialogText = "Passwords are not equal!";
-            formValidateOk = false;
+            m_dialogText = "Password has been changed";
+            clearCredentialsForm();
+            updateCredentialsInForm();
         }
         else
         {
-            // TODO Try changing password in DB
-
-            /* bool databaseError = false;
-             if (databaseError)
-             {
-                 errorString = "Something went wrong with database connection!";
-                 formValidateOk = false;
-             }*/
-
-            m_dialogText = "Password has been changed!";
+            m_dialogText = receivedMessage;
         }
-
-        if (formValidateOk)
-        {
-            // Remove credentials from form
-            m_password = "";
-            m_rePassword = "";
-        }
-
-        // Show dialog box
-        dialogTextField.SetActive(true);
-        updateCredentialsInForm();
+        updateDialogText();
+        dialogText.SetActive(true);
     }
 }
