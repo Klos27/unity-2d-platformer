@@ -182,12 +182,19 @@ public class PlayerController : MonoBehaviour
 
     int GetEndGameMultiplier()
     {
-        if (levelTimeLeftInSeconds == 0)
-            return 1;
-        else if (levelTimeLeftInSeconds < 20)
-            return 2;
+        if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)80)
+            return 10;
+        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)100 &&
+                levelTimeLeftInSeconds <  maxLevelTimeInSeconds - (int)80)
+            return 8;
+        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)120 &&
+                levelTimeLeftInSeconds < maxLevelTimeInSeconds - (int)100)
+            return 6;
+        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)160 &&
+                levelTimeLeftInSeconds < maxLevelTimeInSeconds - (int)120)
+            return 3;
         else
-            return 20;
+            return 1;
 
         // TODO Fill according to design
     }
@@ -211,6 +218,10 @@ public class PlayerController : MonoBehaviour
         else if (collider.tag == "EndGameChest")
         {
             EndGame();
+        }
+        else if (collider.tag == "spikes")
+        {
+            Die();
         }
     }
 
@@ -266,5 +277,6 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         FindObjectOfType<AudioManager>().Play("GameOver");
+        rb.position = new Vector2(-5f, 6.11f);
     }
 }
