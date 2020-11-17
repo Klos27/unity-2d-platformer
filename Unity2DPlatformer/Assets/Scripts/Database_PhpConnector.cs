@@ -7,6 +7,8 @@ using System;
 
 public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
 {
+    private readonly string baseUri = "http://localhost/phpScripts/";
+
     public void TestDatabaseConnection()
     {
         Debug.Log("PHP Connection OK!");
@@ -17,7 +19,7 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         WWWForm form = new WWWForm();
         form.AddField("login", login);
         form.AddField("password", password);
-        string uri = "http://localhost/phpScripts/retrieveExistingPlayer.php";
+        string uri = baseUri + "retrieveExistingPlayer.php";
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
         {
@@ -41,7 +43,7 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         form.AddField("playerId", playerId);
         form.AddField("worldId", worldId);
         form.AddField("score", score);
-        string uri = "http://localhost/phpScripts/updateScore.php";
+        string uri = baseUri + "updateScore.php";
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
         {
@@ -66,7 +68,29 @@ public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
         form.AddField("password", password);
         form.AddField("repeatedPassword", repeatedPassword);
         form.AddField("email", email);
-        string uri = "http://localhost/phpScripts/register.php";
+        string uri = baseUri + "register.php";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError || webRequest.isHttpError)
+            {
+                Debug.Log(webRequest.error);
+            }
+            else
+            {
+                yield return webRequest.downloadHandler.text;
+            }
+        }
+    }
+
+    public IEnumerator RetrievePlayerScores(int playerId)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("playerId", playerId);
+        string uri = baseUri + "retrievePlayerScores.php";
 
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
         {

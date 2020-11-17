@@ -77,4 +77,9 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
     {
         return null;
     }
+
+    public IEnumerator RetrievePlayerScores(int playerId)
+    {
+        return null;
+    }
 }

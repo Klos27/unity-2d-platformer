@@ -50,4 +50,9 @@ public class Database_Utils
     {
         return m_databaseConnector.RegisterUser(login, password, repeatedPassword, email);
     }
+
+    public IEnumerator RetrievePlayerScores(int playerId)
+    {
+        return m_databaseConnector.RetrievePlayerScores(playerId);
+    }
 }
