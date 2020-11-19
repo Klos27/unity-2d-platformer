@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using static Database_Utils;
 
 public class Menu_LevelsScreen : MonoBehaviour
 {
+    private Database_Utils databaseUtils = null;
+
     public GameObject playerNameTextTMP;
     public GameObject scoreLevel1TextTMP;
     public GameObject scoreLevel2TextTMP;
@@ -24,18 +27,23 @@ public class Menu_LevelsScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void OnEnable()
     {
+        if (databaseUtils == null)
+        {
+            databaseUtils = new Database_Utils();
+        }
         InitLevels();
     }
 
     public void InitLevels()
     {
         UpdatePlayerName();
-        UpdateScores();
+        ResetScores();
+        StartCoroutine(UpdateScores());
     }
 
     void UpdatePlayerName()
@@ -43,6 +51,14 @@ public class Menu_LevelsScreen : MonoBehaviour
         // Update player name
         playerName = PlayerPrefs.GetString("playerName");
         playerNameTextTMP.GetComponent<TMP_Text>().text = "Player: " + playerName;
+    }
+
+    void ResetScores()
+    {
+        scoreLevel1TextTMP.GetComponent<TMP_Text>().text = "0";
+        scoreLevel2TextTMP.GetComponent<TMP_Text>().text = "0";
+        scoreLevel3TextTMP.GetComponent<TMP_Text>().text = "0";
+        scoreLevel4TextTMP.GetComponent<TMP_Text>().text = "0";
     }
 
     public void PlayLevel1()
@@ -74,30 +90,40 @@ public class Menu_LevelsScreen : MonoBehaviour
         SceneManager.LoadScene(level); // TODO: MAKE QUEUE FOR LEVELS?
     }
 
-    void UpdateScores()
+    private IEnumerator UpdateScores()
     {
-        // Get scores from DB
         int playerId = PlayerPrefs.GetInt("playerId");
 
-        List<int> playerScores = new List<int> { }; // TODO Get from DB
-        playerScores.Add(111);
-        playerScores.Add(222);
-        playerScores.Add(333);
-        playerScores.Add(444);
+        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrievePlayerScores(playerId));
+        yield return cd.coroutine;
+        string receivedMessage = (string)cd.result;
 
-        // Update Scores
-        //ArrayList scoreLevelTextTMP = new ArrayList();
-        List<GameObject> scoreLevelTextTMP = new List<GameObject> { };
-        scoreLevelTextTMP.Add(scoreLevel1TextTMP);
-        scoreLevelTextTMP.Add(scoreLevel2TextTMP);
-        scoreLevelTextTMP.Add(scoreLevel3TextTMP);
-        scoreLevelTextTMP.Add(scoreLevel4TextTMP);
-
-        int scoresSize = playerScores.Count < scoreLevelTextTMP.Count ? playerScores.Count : scoreLevelTextTMP.Count;
-
-        for (int i = 0; i < scoresSize; ++i)
+        if (receivedMessage[0] == '0')
         {
-            scoreLevelTextTMP[i].GetComponent<TMP_Text>().text = playerScores[i].ToString();
+            string[] rows = receivedMessage.Split('\n');
+
+            for (int i = 1; i < rows.Length; i++)
+            {
+                string row = rows[i];
+                int worldId = int.Parse(row.Split('\t')[0]);
+                string score = row.Split('\t')[1];
+
+                switch (worldId)
+                {
+                    case 1:
+                        scoreLevel1TextTMP.GetComponent<TMP_Text>().text = score;
+                        break;
+                    case 2:
+                        scoreLevel2TextTMP.GetComponent<TMP_Text>().text = score;
+                        break;
+                    case 3:
+                        scoreLevel3TextTMP.GetComponent<TMP_Text>().text = score;
+                        break;
+                    case 4:
+                        scoreLevel4TextTMP.GetComponent<TMP_Text>().text = score;
+                        break;
+                }
+            }
         }
     }
 }

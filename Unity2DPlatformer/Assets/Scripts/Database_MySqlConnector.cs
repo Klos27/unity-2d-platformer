@@ -77,4 +77,14 @@ public class Database_MySqlConnector : Database_IDatabaseConnector
     {
         return null;
     }
+
+    public IEnumerator ChangePassword(string login, string password, string repeatedPassword)
+    {
+        return null;
+    }
+
+    public IEnumerator RetrievePlayerScores(int playerId)
+    {
+        return null;
+    }
 }

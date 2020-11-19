@@ -1,15 +1,15 @@
 <?php
 
-function insertPlayer($con, $login, $password, $email)
+function changePassword($con, $login, $password)
 {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $con->prepare("INSERT INTO player (login, password, email) VALUES (?, ?, ?)");
-    $stmt->bind_param('sss', $login, $hashedPassword, $email);
+    $stmt = $con->prepare("UPDATE player SET password = ? WHERE login = ?");
+    $stmt->bind_param('ss', $hashedPassword, $login);
 
     try {
         $stmt->execute();
     } catch (Exception $e) {
-        echo "8: Creating new player failed. Message: " . $e->getMessage() . "\n";
+        echo "Changing player password failed. Message: " . $e->getMessage() . "\n";
         $stmt->close();
         exit();
     } finally {
@@ -22,17 +22,19 @@ function main()
     require_once "credentialConstraints.php";
     include "databaseConnection.php";
     include "credentialsValidator.php";
+    include "playerRepository.php";
 
     $con = getDatabaseConnection();
     $login = $_POST["login"];
     $password = $_POST["password"];
     $repeatedPassword = $_POST["repeatedPassword"];
-    $email = $_POST["email"];
 
-    validateLogin($con, $login, $LOGIN_MIN_LENGTH, $LOGIN_MAX_LENGTH);
+    if (!playerExistsByLogin($con, $login)) {
+        echo "Player with provided login does not exist";
+        exit();
+    }
     validatePassword($password, $repeatedPassword, $PASSWORD_MIN_LENGTH);
-    validateEmail($con, $email);
-    insertPlayer($con, $login, $password, $email);
+    changePassword($con, $login, $password);
 
     echo "0";
     $con->close();
