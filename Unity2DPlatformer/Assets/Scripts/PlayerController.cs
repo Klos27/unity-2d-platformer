@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private enum State { idle, running, jumping, falling };
     private State state = State.idle;
     [SerializeField] private LayerMask ground = 0;
+    private Vector3 startingPos;
 
     private int xVector = 8;
     private int yVector = 60;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        startingPos = GameObject.Find("Player").transform.position;
     }
 
     // Update is called once per frame
@@ -193,8 +195,6 @@ public class PlayerController : MonoBehaviour
             return 3;
         else
             return 1;
-
-        // TODO Fill according to design
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -272,6 +272,6 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        rb.position = new Vector2(-5f, 6.11f);
+        rb.position = new Vector2(startingPos.x, startingPos.y);
     }
 }
