@@ -132,6 +132,8 @@ public class PlayerController : MonoBehaviour
 
     void EndGame()
     {
+        FindObjectOfType<AudioManager>().Play("EndGameChestCollected");
+
         // Stop time
         PauseMenu.EndGame();
 
@@ -195,12 +197,14 @@ public class PlayerController : MonoBehaviour
         if (collider.tag == "Coin20P")
         {
             Destroy(collider.gameObject);
+            FindObjectOfType<AudioManager>().Play("Coin20PCollected");
             coinPoints += coin20Points;
             UpdatePointsText();
         }
         else if (collider.tag == "Coin10P")
         {
             Destroy(collider.gameObject);
+            FindObjectOfType<AudioManager>().Play("Coin10PCollected");
             coinPoints += coin10Points;
             UpdatePointsText();
         }
@@ -218,8 +222,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (collision.gameObject.transform.position.y <= transform.position.y)
                 {
-                    //TODO remove destroy after Death implemented
-                    Destroy(collision.gameObject);
                     Die();
                 }
             }
@@ -231,8 +233,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (collision.gameObject.transform.position.y >= transform.position.y)
                 {
-                    //TODO remove destroy after Death implemented
-                    Destroy(collision.gameObject);
                     Die();
                 }
             }
@@ -244,8 +244,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (collision.gameObject.transform.position.x <= transform.position.x)
                 {
-                    //TODO remove destroy after Death implemented
-                    Destroy(collision.gameObject);
                     Die();
                 }
             }
@@ -257,8 +255,6 @@ public class PlayerController : MonoBehaviour
             {
                 if (collision.gameObject.transform.position.x >= transform.position.x)
                 {
-                    //TODO remove destroy after Death implemented
-                    Destroy(collision.gameObject);
                     Die();
                 }
             }
@@ -269,6 +265,6 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-
+        FindObjectOfType<AudioManager>().Play("GameOver");
     }
 }
