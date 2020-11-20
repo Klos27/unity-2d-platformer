@@ -8,122 +8,121 @@ using static Database_Utils;
 
 public class Menu_LevelsScreen : MonoBehaviour
 {
-    private Database_Utils databaseUtils = null;
+	private Database_Utils databaseUtils = null;
 
-    public GameObject playerNameTextTMP;
-    public GameObject scoreLevel1TextTMP;
-    public GameObject scoreLevel2TextTMP;
-    public GameObject scoreLevel3TextTMP;
-    public GameObject scoreLevel4TextTMP;
+	public GameObject playerNameTextTMP;
+	public GameObject scoreLevel1TextTMP;
+	public GameObject scoreLevel2TextTMP;
+	public GameObject scoreLevel3TextTMP;
+	public GameObject scoreLevel4TextTMP;
+	private Dictionary<int, GameObject> scores = null;
 
-    private string playerName = "";
+	private string playerName = "";
 
-    // Start is called before the first frame update
-    void Start()
-    {
+	// Start is called before the first frame update
+	void Start()
+	{
 
-    }
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
+	// Update is called once per frame
+	void Update()
+	{
 
-    }
+	}
 
-    void OnEnable()
-    {
-        if (databaseUtils == null)
-        {
-            databaseUtils = new Database_Utils();
-        }
-        InitLevels();
-    }
+	void OnEnable()
+	{
+		if (databaseUtils == null)
+		{
+			databaseUtils = new Database_Utils();
+		}
+		InitLevels();
+	}
 
-    public void InitLevels()
-    {
-        UpdatePlayerName();
-        ResetScores();
-        StartCoroutine(UpdateScores());
-    }
+	public void InitLevels()
+	{
+		UpdatePlayerName();
+		InitScoresFields();
+		ResetScoresFields();
+		StartCoroutine(UpdateScores());
+	}
 
-    void UpdatePlayerName()
-    {
-        // Update player name
-        playerName = PlayerPrefs.GetString("playerName");
-        playerNameTextTMP.GetComponent<TMP_Text>().text = "Player: " + playerName;
-    }
+	void InitScoresFields()
+	{
+		if (scores == null)
+		{
+			scores = new Dictionary<int, GameObject>();
+			scores.Add(1, scoreLevel1TextTMP);
+			scores.Add(2, scoreLevel2TextTMP);
+			scores.Add(3, scoreLevel3TextTMP);
+			scores.Add(4, scoreLevel4TextTMP);
+		}
+	}
 
-    void ResetScores()
-    {
-        scoreLevel1TextTMP.GetComponent<TMP_Text>().text = "0";
-        scoreLevel2TextTMP.GetComponent<TMP_Text>().text = "0";
-        scoreLevel3TextTMP.GetComponent<TMP_Text>().text = "0";
-        scoreLevel4TextTMP.GetComponent<TMP_Text>().text = "0";
-    }
+	void ResetScoresFields()
+	{
+		foreach (int key in scores.Keys)
+		{
+			scores[key].GetComponent<TMP_Text>().text = "0";
+		}
+	}
 
-    public void PlayLevel1()
-    {
-        Debug.Log("Play level 1");
-        PlayGame("Level_1");
-    }
+	void UpdatePlayerName()
+	{
+		// Update player name
+		playerName = PlayerPrefs.GetString("playerName");
+		playerNameTextTMP.GetComponent<TMP_Text>().text = "Player: " + playerName;
+	}
 
-    public void PlayLevel2()
-    {
-        Debug.Log("Play level 2");
-        PlayGame("Level_2");
-    }
+	public void PlayLevel1()
+	{
+		Debug.Log("Play level 1");
+		PlayGame("Level_1");
+	}
 
-    public void PlayLevel3()
-    {
-        Debug.Log("Play level 3");
-        PlayGame("Level_3");
-    }
+	public void PlayLevel2()
+	{
+		Debug.Log("Play level 2");
+		PlayGame("Level_2");
+	}
 
-    public void PlayLevel4()
-    {
-        Debug.Log("Play level 4");
-        PlayGame("Level_4");
-    }
+	public void PlayLevel3()
+	{
+		Debug.Log("Play level 3");
+		PlayGame("Level_3");
+	}
 
-    void PlayGame(string level)
-    {
-        SceneManager.LoadScene(level); // TODO: MAKE QUEUE FOR LEVELS?
-    }
+	public void PlayLevel4()
+	{
+		Debug.Log("Play level 4");
+		PlayGame("Level_4");
+	}
 
-    private IEnumerator UpdateScores()
-    {
-        int playerId = PlayerPrefs.GetInt("playerId");
+	void PlayGame(string level)
+	{
+		SceneManager.LoadScene(level); // TODO: MAKE QUEUE FOR LEVELS?
+	}
 
-        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrievePlayerScores(playerId));
-        yield return cd.coroutine;
-        string receivedMessage = (string)cd.result;
+	private IEnumerator UpdateScores()
+	{
+		int playerId = PlayerPrefs.GetInt("playerId");
 
-        if (receivedMessage[0] == '0')
-        {
-            string[] rows = receivedMessage.Split('\n');
+		CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrievePlayerScores(playerId));
+		yield return cd.coroutine;
+		string receivedMessage = (string)cd.result;
 
-            for (int i = 1; i < rows.Length; i++)
-            {
-                string row = rows[i];
-                int worldId = int.Parse(row.Split('\t')[0]);
-                string score = row.Split('\t')[1];
+		if (receivedMessage[0] == '0')
+		{
+			string[] rows = receivedMessage.Split('\n');
 
-                switch (worldId)
-                {
-                    case 1:
-                        scoreLevel1TextTMP.GetComponent<TMP_Text>().text = score;
-                        break;
-                    case 2:
-                        scoreLevel2TextTMP.GetComponent<TMP_Text>().text = score;
-                        break;
-                    case 3:
-                        scoreLevel3TextTMP.GetComponent<TMP_Text>().text = score;
-                        break;
-                    case 4:
-                        scoreLevel4TextTMP.GetComponent<TMP_Text>().text = score;
-                        break;
-                }
-            }
-        }
-    }
+			for (int i = 1; i < rows.Length; i++)
+			{
+				string row = rows[i];
+				int worldId = int.Parse(row.Split('\t')[0]);
+				string score = row.Split('\t')[1];
+				scores[worldId].GetComponent<TMP_Text>().text = score;
+			}
+		}
+	}
 }
