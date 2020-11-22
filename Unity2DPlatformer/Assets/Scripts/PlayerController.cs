@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
 
     private enum State { idle, running, jumping, falling };
     private State state = State.idle;
+    bool isGrounded;
+    public Transform groundCheck;
+    public float checkRadius;
     [SerializeField] private LayerMask ground = 0;
     private Vector3 startingPos;
 
@@ -66,6 +69,7 @@ public class PlayerController : MonoBehaviour
     void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, ground);
 
         if (hDirection < 0)
         {
@@ -77,7 +81,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(xVector, rb.velocity.y);
             transform.localScale = new Vector2(1, 1);
         }
-        if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, yVector);
             state = State.jumping;
@@ -94,7 +98,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (state == State.falling)
         {
-            if (coll.IsTouchingLayers(ground))
+            if (isGrounded)
             {
                 state = State.idle;
             }
@@ -108,7 +112,7 @@ public class PlayerController : MonoBehaviour
             state = State.idle;
         }
 
-        if ((!coll.IsTouchingLayers(ground) || rb.velocity.y < 0) && state != State.jumping)
+        if (!coll.IsTouchingLayers(ground) && state != State.jumping)
         {
             state = State.falling;
         }
