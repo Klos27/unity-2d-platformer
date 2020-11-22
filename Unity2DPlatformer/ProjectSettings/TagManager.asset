@@ -10,6 +10,8 @@ TagManager:
   - Spikes_Vert_R
   - Spikes_Hor_D
   - Spikes_Hor_U
+  - EndGameChest
+  - spikes
   layers:
   - Default
   - TransparentFX
