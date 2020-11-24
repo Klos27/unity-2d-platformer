@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int coinPoints = 0;
     [SerializeField] private TMP_Text timerText = null;
     [SerializeField] private TMP_Text pointsText = null;
+    [SerializeField] private AudioSource footstepSound;
+    [SerializeField] private AudioSource jumpSound;
 
     // End game panel
     [SerializeField] private GameObject endGamePanel = null;
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TMP_Text endGameTimeLeftValueText = null;
     [SerializeField] private TMP_Text endGamePointsMultiplierValueText = null;
     [SerializeField] private TMP_Text endGameFinalScoreValueText = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -282,5 +285,15 @@ public class PlayerController : MonoBehaviour
     {
         FindObjectOfType<AudioManager>().Play("GameOver");
         rb.position = new Vector2(startingPos.x, startingPos.y);
+    }
+
+    void Footstep()
+    {
+        footstepSound.Play();
+    }
+
+    void Jump()
+    {
+        jumpSound.Play();
     }
 }
