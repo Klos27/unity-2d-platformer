@@ -26,14 +26,14 @@ public class PlayerController : MonoBehaviour
     private int coin20Points = 20;
     private int coin10Points = 10;
 
-    private const int maxLevelTimeInSeconds = 120;
-    private int levelTimeLeftInSeconds = maxLevelTimeInSeconds;
+    private int maxLevelTimeInSeconds = 0;
+    private int levelTimeLeftInSeconds = 0;
 
     [SerializeField] private int coinPoints = 0;
     [SerializeField] private TMP_Text timerText = null;
     [SerializeField] private TMP_Text pointsText = null;
-    [SerializeField] private AudioSource footstepSound;
-    [SerializeField] private AudioSource jumpSound;
+    [SerializeField] private AudioSource footstepSound = null;
+    [SerializeField] private AudioSource jumpSound = null;
 
     // End game panel
     [SerializeField] private GameObject endGamePanel = null;
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
         startingPos = GameObject.Find("Player").transform.position;
+        setProperLevelTime();
     }
 
     // Update is called once per frame
@@ -69,6 +70,49 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    void setProperLevelTime()
+    {
+        var levelTimeInSecondsMap = new Dictionary<int, int>()
+        {
+            // Map <levelId, maxTimeInSecods>
+            { 0, 120 }, // default level
+            { 1, 120 },
+            { 2, 120 },
+            { 3, 120 },
+            { 4, 120 }
+        };
+
+        int worldId = getWorldId();
+
+        if (levelTimeInSecondsMap.ContainsKey(worldId))
+        {
+            maxLevelTimeInSeconds = levelTimeInSecondsMap[worldId];
+        }
+        else
+        {
+            maxLevelTimeInSeconds = 120;
+        }
+        
+        levelTimeLeftInSeconds = maxLevelTimeInSeconds;
+    }
+
+    int getWorldId()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+        int worldId = 0;
+        try
+        {
+            worldId = int.Parse(sceneName.Substring(6)); // Substring Level_<level_number>
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+        }
+        
+        return worldId;
+    }
+
     void Movement()
     {
         float hDirection = Input.GetAxis("Horizontal");
@@ -161,8 +205,7 @@ public class PlayerController : MonoBehaviour
         int finalScore = scoreMultiplier * coinPoints;
         endGameFinalScoreValueText.text = finalScore.ToString("0000");
 
-        string sceneName = SceneManager.GetActiveScene().name;
-        int worldId = int.Parse(sceneName.Substring(6)); // Substring Level_<level_number>
+        int worldId = getWorldId();
 
         StartCoroutine(updateScore(PlayerPrefs.GetInt("playerId"), worldId, finalScore));
     }
@@ -191,16 +234,13 @@ public class PlayerController : MonoBehaviour
 
     int GetEndGameMultiplier()
     {
-        if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)80)
+        if (levelTimeLeftInSeconds >= (int)(maxLevelTimeInSeconds * 0.8))
             return 10;
-        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)100 &&
-                levelTimeLeftInSeconds <  maxLevelTimeInSeconds - (int)80)
+        else if (levelTimeLeftInSeconds >= (int)(maxLevelTimeInSeconds * 0.6))
             return 8;
-        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)120 &&
-                levelTimeLeftInSeconds < maxLevelTimeInSeconds - (int)100)
+        else if (levelTimeLeftInSeconds >= (int)(maxLevelTimeInSeconds * 0.4))
             return 6;
-        else if (levelTimeLeftInSeconds >= maxLevelTimeInSeconds - (int)160 &&
-                levelTimeLeftInSeconds < maxLevelTimeInSeconds - (int)120)
+        else if (levelTimeLeftInSeconds >= (int)(maxLevelTimeInSeconds * 0.2))
             return 3;
         else
             return 1;
