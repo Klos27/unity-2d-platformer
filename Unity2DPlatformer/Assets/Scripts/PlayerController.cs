@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<Collider2D>();
         startingPos = GameObject.Find("Player").transform.position;
         setProperLevelTime();
+        UpdatePointsText();
     }
 
     // Update is called once per frame
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
             // Map <levelId, maxTimeInSecods>
             { 0, 120 }, // default level
             { 1, 120 },
-            { 2, 120 },
+            { 2, 180 },
             { 3, 120 },
             { 4, 120 }
         };
@@ -180,7 +181,8 @@ public class PlayerController : MonoBehaviour
 
     void UpdatePointsText()
     {
-        pointsText.text = "Points: " + coinPoints.ToString("0000");
+        //pointsText.text = "Points: " + coinPoints.ToString("0000"); // Will print 0010
+        pointsText.text = "Points: " + coinPoints.ToString(); // Will print 10
     }
 
     void EndGame()
@@ -194,7 +196,7 @@ public class PlayerController : MonoBehaviour
         endGamePanel.SetActive(true);
 
         // Count final score
-        endGamePointsValueText.text = coinPoints.ToString("0000");
+        endGamePointsValueText.text = coinPoints.ToString();
         int minutes = levelTimeLeftInSeconds / 60;
         int seconds = levelTimeLeftInSeconds % 60;
         endGameTimeLeftValueText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
@@ -203,7 +205,7 @@ public class PlayerController : MonoBehaviour
         endGamePointsMultiplierValueText.text = "x" + scoreMultiplier.ToString("00");
 
         int finalScore = scoreMultiplier * coinPoints;
-        endGameFinalScoreValueText.text = finalScore.ToString("0000");
+        endGameFinalScoreValueText.text = finalScore.ToString();
 
         int worldId = getWorldId();
 
