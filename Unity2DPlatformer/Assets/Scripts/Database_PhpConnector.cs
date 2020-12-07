@@ -7,128 +7,152 @@ using System;
 
 public class Database_PhpConnector : MonoBehaviour, Database_IDatabaseConnector
 {
-    private readonly string baseUri = "http://localhost/phpScripts/";
+	private readonly string baseUri = "http://localhost/phpScripts/";
 
-    public void TestDatabaseConnection()
-    {
-        Debug.Log("PHP Connection OK!");
-    }
+	public void TestDatabaseConnection()
+	{
+		Debug.Log("PHP Connection OK!");
+	}
 
-    public IEnumerator LoginUser(string login, string password)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("login", login);
-        form.AddField("password", password);
-        string uri = baseUri + "retrieveExistingPlayer.php";
+	public IEnumerator LoginUser(string login, string password)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("login", login);
+		form.AddField("password", password);
+		string uri = baseUri + "retrieveExistingPlayer.php";
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                yield return webRequest.downloadHandler.text;
-            }
-        }
-    }
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
 
-    public IEnumerator UpdateScore(int playerId, int worldId, int score)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("playerId", playerId);
-        form.AddField("worldId", worldId);
-        form.AddField("score", score);
-        string uri = baseUri + "updateScore.php";
+	public IEnumerator UpdateScore(int playerId, int worldId, int score)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("playerId", playerId);
+		form.AddField("worldId", worldId);
+		form.AddField("score", score);
+		string uri = baseUri + "updateScore.php";
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                yield return webRequest.downloadHandler.text;
-            }
-        }
-    }
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
 
-    public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("login", login);
-        form.AddField("password", password);
-        form.AddField("repeatedPassword", repeatedPassword);
-        form.AddField("email", email);
-        string uri = baseUri + "register.php";
+	public IEnumerator RegisterUser(string login, string password, string repeatedPassword, string email)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("login", login);
+		form.AddField("password", password);
+		form.AddField("repeatedPassword", repeatedPassword);
+		form.AddField("email", email);
+		string uri = baseUri + "register.php";
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                yield return webRequest.downloadHandler.text;
-            }
-        }
-    }
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
 
-    public IEnumerator RetrievePlayerScores(int playerId)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("playerId", playerId);
-        string uri = baseUri + "retrievePlayerScores.php";
+	public IEnumerator RetrievePlayerScores(int playerId)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("playerId", playerId);
+		string uri = baseUri + "retrievePlayerScores.php";
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                yield return webRequest.downloadHandler.text;
-            }
-        }
-    }
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
 
-    public IEnumerator ChangePassword(string login, string password, string repeatedPassword)
-    {
-        WWWForm form = new WWWForm();
-        form.AddField("login", login);
-        form.AddField("password", password);
-        form.AddField("repeatedPassword", repeatedPassword);
-        string uri = "http://localhost/phpScripts/changePassword.php";
+	public IEnumerator ChangePassword(string login, string password, string repeatedPassword)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("login", login);
+		form.AddField("password", password);
+		form.AddField("repeatedPassword", repeatedPassword);
+		string uri = baseUri + "changePassword.php";
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
 
-            if (webRequest.isNetworkError || webRequest.isHttpError)
-            {
-                Debug.Log(webRequest.error);
-            }
-            else
-            {
-                yield return webRequest.downloadHandler.text;
-            }
-        }
-    }
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
+
+	public IEnumerator RetrieveTopScores(int top, string login, int worldId)
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("top", top);
+		form.AddField("login", login);
+		form.AddField("worldId", worldId);
+		string uri = baseUri + "retrieveTopScores.php";
+
+		using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+		{
+			// Request and wait for the desired page.
+			yield return webRequest.SendWebRequest();
+
+			if (webRequest.isNetworkError || webRequest.isHttpError)
+			{
+				Debug.Log(webRequest.error);
+			}
+			else
+			{
+				yield return webRequest.downloadHandler.text;
+			}
+		}
+	}
 }
