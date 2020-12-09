@@ -1,31 +1,19 @@
 fileFormatVersion: 2
-guid: 681693cc4e4dcc34f8fcb55bc48dd7e6
+guid: 46e700b9cdb32734798a2ca6ae65eda4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -138635041705902363
-    second: Skarb_0
+      213: -3101869140703737640
+    second: skarb3_0
   - first:
-      213: 8822160968955366371
-    second: Skarb_1
+      213: -1129789140658764032
+    second: skarb3_1
   - first:
-      213: 9090177452287571237
-    second: Skarb_2
+      213: -585258936895913534
+    second: skarb3_2
   - first:
-      213: -2833131545711246318
-    second: Skarb_3
-  - first:
-      213: -7597153555311683833
-    second: Skarb_0
-  - first:
-      213: 1543565270772313981
-    second: Skarb_1
-  - first:
-      213: 5138986197804517329
-    second: Skarb_2
-  - first:
-      213: 6862069254179248463
-    second: Skarb_3
+      213: -787520852773950379
+    second: skarb3_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -113,85 +101,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Skarb_0
+      name: skarb3_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 3
         y: 32
-        width: 31
+        width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7071d87c71d719690800000000000000
-      internalID: -7597153555311683833
+      spriteID: 8d88b907372f3f4d0800000000000000
+      internalID: -3101869140703737640
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skarb_1
+      name: skarb3_1
       rect:
         serializedVersion: 2
         x: 33
         y: 32
-        width: 31
+        width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7f63048f68db6510800000000000000
-      internalID: 1543565270772313981
+      spriteID: 007c0ff23ce2250f0800000000000000
+      internalID: -1129789140658764032
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skarb_2
+      name: skarb3_2
       rect:
         serializedVersion: 2
-        x: 2
+        x: 3
         y: 2
-        width: 31
+        width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1d706c928b8515740800000000000000
-      internalID: 5138986197804517329
+      spriteID: 2c142b4091eb0e7f0800000000000000
+      internalID: -585258936895913534
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Skarb_3
+      name: skarb3_3
       rect:
         serializedVersion: 2
         x: 33
         y: 2
-        width: 31
+        width: 30
         height: 30
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f49db7f31a7fa3f50800000000000000
-      internalID: 6862069254179248463
+      spriteID: 55c2235f4f92215f0800000000000000
+      internalID: -787520852773950379
       vertices: []
       indices: 
       edges: []
