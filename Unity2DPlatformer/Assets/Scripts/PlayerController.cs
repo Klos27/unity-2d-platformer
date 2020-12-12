@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
             { 0, 120 }, // default level
             { 1, 120 },
             { 2, 180 },
-            { 3, 120 },
+            { 3, 180 },
             { 4, 120 }
         };
 
