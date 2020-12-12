@@ -30241,7 +30241,7 @@ MonoBehaviour:
   mixerGroup: {fileID: 0}
   sounds:
   - name: Level_1Background
-    clip: {fileID: 8300000, guid: bdc52d246cae2424ab7fb123f3901cec, type: 3}
+    clip: {fileID: 8300000, guid: ee671e6e8e23d3441a7e2a0747886968, type: 3}
     volume: 0.5
     volumeVariance: 0
     pitch: 1
@@ -32734,21 +32734,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 813545620}
     m_Modifications:
-    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.97
-      objectReference: {fileID: 0}
-    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 23.73
-      objectReference: {fileID: 0}
     - target: {fileID: 8689426921240136725, guid: 10f5e32e6fd37d445907ce27f03ce1a6,
         type: 3}
       propertyPath: m_Name
@@ -32823,6 +32808,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.5332055
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505355080322463718, guid: 584b6e368dd459b4db99e6abdeafad84,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 23.73
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 584b6e368dd459b4db99e6abdeafad84, type: 3}
