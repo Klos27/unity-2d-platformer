@@ -134,28 +134,31 @@ public class Menu_Ladderboards : MonoBehaviour
 	{
 		string currPlayerName = PlayerPrefs.GetString("playerName");
 
-		CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrieveTopScores(m_top, currPlayerName, m_actualLevelId));
-		yield return cd.coroutine;
-		string receivedMessage = (string)cd.result;
-		string[] rows = receivedMessage.Split('\n');
-
-		ClearLadderboards();
-
-		for (int i = 0; i < rows.Length; i++)
+		if (!currPlayerName.Equals("Guest"))
 		{
-			if (i == m_top)
+			CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrieveTopScores(m_top, currPlayerName, m_actualLevelId));
+			yield return cd.coroutine;
+			string receivedMessage = (string)cd.result;
+			string[] rows = receivedMessage.Split('\n');
+
+			ClearLadderboards();
+
+			for (int i = 0; i < rows.Length; i++)
 			{
-				AddSkippingRow();
+				if (i == m_top)
+				{
+					AddSkippingRow();
+				}
+
+				string row = rows[i];
+				string rank = row.Split('\t')[0];
+				string playerName = row.Split('\t')[1];
+				string score = row.Split('\t')[2];
+				AddPlayerToLadderboards(rank, playerName, score);
 			}
 
-			string row = rows[i];
-			string rank = row.Split('\t')[0];
-			string playerName = row.Split('\t')[1];
-			string score = row.Split('\t')[2];
-			AddPlayerToLadderboards(rank, playerName, score);
+			RemoveLastNewLinesInLeaderboards();
+			RenderLadderboards();
 		}
-
-		RemoveLastNewLinesInLeaderboards();
-		RenderLadderboards();
 	}
 }

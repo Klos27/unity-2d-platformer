@@ -45,7 +45,7 @@ public class Menu_LevelsScreen : MonoBehaviour
 		UpdatePlayerName();
 		InitScoresFields();
 		ResetScoresFields();
-		StartCoroutine(UpdateScores());
+		StartCoroutine(UpdateScores());		
 	}
 
 	void InitScoresFields()
@@ -101,27 +101,31 @@ public class Menu_LevelsScreen : MonoBehaviour
 
 	void PlayGame(string level)
 	{
-		SceneManager.LoadScene(level); // TODO: MAKE QUEUE FOR LEVELS?
+		SceneManager.LoadScene(level);
 	}
 
 	private IEnumerator UpdateScores()
 	{
-		int playerId = PlayerPrefs.GetInt("playerId");
-
-		CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrievePlayerScores(playerId));
-		yield return cd.coroutine;
-		string receivedMessage = (string)cd.result;
-
-		if (receivedMessage[0] == '0')
+		string playerName = PlayerPrefs.GetString("playerName");
+		if (!playerName.Equals("Guest"))
 		{
-			string[] rows = receivedMessage.Split('\n');
+			int playerId = PlayerPrefs.GetInt("playerId");
 
-			for (int i = 1; i < rows.Length; i++)
+			CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RetrievePlayerScores(playerId));
+			yield return cd.coroutine;
+			string receivedMessage = (string)cd.result;
+
+			if (receivedMessage[0] == '0')
 			{
-				string row = rows[i];
-				int worldId = int.Parse(row.Split('\t')[0]);
-				string score = row.Split('\t')[1];
-				scores[worldId].GetComponent<TMP_Text>().text = score;
+				string[] rows = receivedMessage.Split('\n');
+
+				for (int i = 1; i < rows.Length; i++)
+				{
+					string row = rows[i];
+					int worldId = int.Parse(row.Split('\t')[0]);
+					string score = row.Split('\t')[1];
+					scores[worldId].GetComponent<TMP_Text>().text = score;
+				}
 			}
 		}
 	}

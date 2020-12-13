@@ -50,7 +50,8 @@ public class Menu_ForgotPassword : MonoBehaviour
 
         if (!validateEmail(m_email))
         {
-            m_dialogText = "Email is not correct!";
+            // Move validation to PHP Script as is for Register
+            //m_dialogText = "Email is not correct!";
             formValidateOk = false;
         }
         else

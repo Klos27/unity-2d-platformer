@@ -208,23 +208,26 @@ public class PlayerController : MonoBehaviour
         endGameFinalScoreValueText.text = finalScore.ToString();
 
         int worldId = getWorldId();
-
         StartCoroutine(updateScore(PlayerPrefs.GetInt("playerId"), worldId, finalScore));
     }
 
     private IEnumerator updateScore(int playerId, int worldId, int finalScore)
     {
-        Database_Utils databaseUtils = new Database_Utils();
-        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.UpdateScore(playerId, worldId, finalScore));
-        yield return cd.coroutine;
-        string updateScoreReceivedMessage = (string)cd.result;
-        if ("0".Equals(updateScoreReceivedMessage))
+        string playerName = PlayerPrefs.GetString("playerName");
+        if (!playerName.Equals("Guest"))
         {
-            Debug.Log("Player score updating has been successfully executed");
-        }
-        else
-        {
-            Debug.LogError(updateScoreReceivedMessage);
+            Database_Utils databaseUtils = new Database_Utils();
+            CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.UpdateScore(playerId, worldId, finalScore));
+            yield return cd.coroutine;
+            string updateScoreReceivedMessage = (string)cd.result;
+            if ("0".Equals(updateScoreReceivedMessage))
+            {
+                Debug.Log("Player score updating has been successfully executed");
+            }
+            else
+            {
+                Debug.LogError(updateScoreReceivedMessage);
+            }
         }
     }
 

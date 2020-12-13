@@ -75,21 +75,15 @@ public class Menu_LoginScreen : MonoBehaviour
         m_login = loginInputField.GetComponent<InputField>().text;
         m_password = passwordInputField.GetComponent<InputField>().text;
 
-        StartCoroutine(logInUser(m_login, m_password));
+       StartCoroutine(logInUser(m_login, m_password));
     }
 
     private IEnumerator logInUser(string login, string password)
     {
-        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.LoginUser(login, password));
-        yield return cd.coroutine;
-        string receivedMessage = (string)cd.result;
-        if (receivedMessage[0] == '0')
+        if (login.Equals("Guest"))
         {
-            int userId = int.Parse(receivedMessage.Split('\t')[1]);
-            string userDbLogin = receivedMessage.Split('\t')[2];
-
-            PlayerPrefs.SetInt("playerId", userId);
-            PlayerPrefs.SetString("playerName", userDbLogin);
+            PlayerPrefs.SetInt("playerId", int.MaxValue);
+            PlayerPrefs.SetString("playerName", m_login);
             PlayerPrefs.Save();
 
             clearCredentialsForm();
@@ -100,9 +94,39 @@ public class Menu_LoginScreen : MonoBehaviour
         }
         else
         {
-            m_dialogText = receivedMessage;
-            updateDialogText();
-            dialogText.SetActive(true);
+            CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.LoginUser(login, password));
+            yield return cd.coroutine;
+            try
+            {
+                string receivedMessage = (string)cd.result;
+                if (receivedMessage[0] == '0')
+                {
+                    int userId = int.Parse(receivedMessage.Split('\t')[1]);
+                    string userDbLogin = receivedMessage.Split('\t')[2];
+
+                    PlayerPrefs.SetInt("playerId", userId);
+                    PlayerPrefs.SetString("playerName", userDbLogin);
+                    PlayerPrefs.Save();
+
+                    clearCredentialsForm();
+                    updateCredentialsInForm();
+
+                    background_LoginScreen.SetActive(false);
+                    background_MainMenu.SetActive(true);
+                }
+                else
+                {
+                    m_dialogText = receivedMessage;
+                    updateDialogText();
+                    dialogText.SetActive(true);
+                }
+            }
+            catch (System.Exception)
+            {
+                m_dialogText = "Error while connecting to database";
+                updateDialogText();
+                dialogText.SetActive(true);
+            }
         }
     }
 }
