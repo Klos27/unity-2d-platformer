@@ -93,18 +93,27 @@ public class Menu_Register : MonoBehaviour
     {
         CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.RegisterUser(login, password, repeatedPassword, email));
         yield return cd.coroutine;
-        string registrationReceivedMessage = (string)cd.result;
-        if ("0".Equals(registrationReceivedMessage))
+        try
         {
-            m_dialogText = "Account has been created. You can log in";
-            clearCredentialsForm();
-            updateCredentialsInForm();
+            string registrationReceivedMessage = (string)cd.result;
+            if ("0".Equals(registrationReceivedMessage))
+            {
+                m_dialogText = "Account has been created. You can log in";
+                clearCredentialsForm();
+                updateCredentialsInForm();
+            }
+            else
+            {
+                m_dialogText = registrationReceivedMessage;
+            }
+            updateDialogText();
+            dialogText.SetActive(true);
         }
-        else
+        catch (System.Exception)
         {
-            m_dialogText = registrationReceivedMessage;
+            m_dialogText = "Error while connecting to database";
+            updateDialogText();
+            dialogText.SetActive(true);
         }
-        updateDialogText();
-        dialogText.SetActive(true);
     }
 }

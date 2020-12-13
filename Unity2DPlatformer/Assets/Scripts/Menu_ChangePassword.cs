@@ -84,25 +84,30 @@ public class Menu_ChangePassword : MonoBehaviour
     {
         dialogText.SetActive(false);
         getCredentialsFromForm();
+
         StartCoroutine(resetPassword(PlayerPrefs.GetString("playerName"), m_password, m_rePassword));
     }
 
     private IEnumerator resetPassword(string login, string password, string repeatedPassword)
     {
-        CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.ChangePassword(login, password, repeatedPassword));
-        yield return cd.coroutine;
-        string receivedMessage = (string)cd.result;
-        if ("0".Equals(receivedMessage))
+        string playerName = PlayerPrefs.GetString("playerName");
+        if (!playerName.Equals("Guest"))
         {
-            m_dialogText = "Password has been changed";
-            clearCredentialsForm();
-            updateCredentialsInForm();
+            CoroutineWithData cd = new CoroutineWithData(this, databaseUtils.ChangePassword(login, password, repeatedPassword));
+            yield return cd.coroutine;
+            string receivedMessage = (string)cd.result;
+            if ("0".Equals(receivedMessage))
+            {
+                m_dialogText = "Password has been changed";
+                clearCredentialsForm();
+                updateCredentialsInForm();
+            }
+            else
+            {
+                m_dialogText = receivedMessage;
+            }
+            updateDialogText();
+            dialogText.SetActive(true);
         }
-        else
-        {
-            m_dialogText = receivedMessage;
-        }
-        updateDialogText();
-        dialogText.SetActive(true);
     }
 }
